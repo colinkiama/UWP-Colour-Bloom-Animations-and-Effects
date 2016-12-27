@@ -1,0 +1,105 @@
+﻿<Page
+    x:Class="colourBloomPivot.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:colourBloomPivot"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Loaded="Page_Loaded"
+    mc:Ignorable="d">
+
+    <Page.Transitions>
+        <TransitionCollection>
+            <NavigationThemeTransition>
+                <NavigationThemeTransition.DefaultNavigationTransitionInfo>
+                    <EntranceNavigationTransitionInfo />
+                </NavigationThemeTransition.DefaultNavigationTransitionInfo>
+            </NavigationThemeTransition>
+        </TransitionCollection>
+    </Page.Transitions>
+
+    <!--> UICanvas is where the animaiton will occur. In this case, it's the almost
+    the whole display (Excluding the staus bar but you can add that functionallity by 
+    using "SetDesiredBoundsMode" in App.xaml.cs Which requires you to referenece
+    the Windows Mobile Extensions for UWP).
+   
+    <-->
+    <Grid Name="UICanvas"
+          Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+          SizeChanged="UICanvas_SizeChanged">
+
+        
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+           <!-->This Rectangle below is where the animation starts from
+            I originally wanted the animation to start from the postion of the pivot item title selected
+            but I couldn't figure it out. It would be awesome if someone found a solution...<-->
+            <Rectangle x:Name="hostForVisual" />
+         
+            <Pivot Name="mainPivot"
+                   SelectionChanged="treePivot_SelectionChanged">
+<!-->Notice how every Pivot Items is transparent. They need to be "Filled" with colour<-->
+                <PivotItem Name="firstPivot"
+                           Header="frst"
+                           Background="Transparent">
+
+                    <RelativePanel>
+
+                        <TextBlock Name="Welcome"
+                                   Text="Welcome Back!"
+                                   FontSize="36"
+                                   RelativePanel.AlignVerticalCenterWithPanel="True"
+                                   RelativePanel.AlignHorizontalCenterWithPanel="True" />
+
+                    </RelativePanel>
+
+                </PivotItem>
+                <PivotItem Name="secondPivot"
+                           Header="second"
+                           Background="Transparent">
+                    <Grid Name="moneyTreeSpace">
+
+                        <RelativePanel HorizontalAlignment="Stretch">
+                           
+                            <TextBlock Text="Woohoo!"
+                                       RelativePanel.AlignHorizontalCenterWithPanel="True"
+                                       RelativePanel.AlignVerticalCenterWithPanel="True"></TextBlock>
+
+                         
+                           
+                        </RelativePanel>
+                    </Grid>
+                </PivotItem>
+                <PivotItem Name="thirdPivot"
+                           Header="third"
+                           Background="Transparent">
+                    <RelativePanel>
+                      
+                            <TextBlock Text="Yes!!!"
+                                       Foreground="Black"
+                                       RelativePanel.AlignHorizontalCenterWithPanel="True"
+                                       RelativePanel.AlignVerticalCenterWithPanel="True"/>
+                       
+                    </RelativePanel>
+                </PivotItem>
+            </Pivot>
+        </Grid>
+        <!-->I made the command bar, part of the grid so the animation can occur inside the command bar too. 
+        Pretty cool right?
+        The Colour for the background is pretty good for 
+        when you want to use to play around with transparency in your UI.
+        Feel free to use it in your own projects! 
+        <-->
+        <CommandBar Name="bottomBar"
+                    Grid.Row="1"
+                    Background="#19000000"
+                    Foreground="DarkBlue">
+
+        </CommandBar>
+    </Grid>
+
+    </Page>
