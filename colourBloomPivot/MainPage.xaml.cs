@@ -331,6 +331,7 @@ namespace colourBloomPivot
 
         private void surroundBloomButton_Click(object sender, RoutedEventArgs e)
         {
+            //Where the multiple colorBloom effect is activated
           
             //all of these headers are actually textblocks I've placed on the sides of the grid.
             var header = topFlower;
