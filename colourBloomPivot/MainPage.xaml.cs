@@ -40,16 +40,17 @@ namespace colourBloomPivot
         bool pivotColorBloom = false;
         PropertySet _colorsByPivotItem;
         ColorBloomTransitionHelper transition;
+        ColorBloomTransitionHelper buttonTransition;
         Queue<PivotItem> pendingTransitions = new Queue<PivotItem>();
         Queue<Rectangle> pendingPageTransitions = new Queue<Rectangle>();
-      
+
         public MainPage()
         {
             this.InitializeComponent();
 
 
 
-           
+
 
             if (carefulPlz == false)
             {
@@ -75,7 +76,7 @@ namespace colourBloomPivot
             //this fix for the bug (when navigating to this page) would make the app crash at launch
             if (!(e.Parameter == null) && e.Parameter.ToString() != "")
             {
-            
+
                 carefulPlz = true;
             }
         }
@@ -97,9 +98,9 @@ namespace colourBloomPivot
 
         }
 
- 
 
-        
+
+
         /// Assign a key and a colour to each pivot item. I made the key the same as the name of the 
         /// items themeselves to make it easier for myself.
         private void InitializeColors()
@@ -112,29 +113,35 @@ namespace colourBloomPivot
         }
 
 
-        
+
         /// All of the Color Bloom transition functionality is encapsulated in this handy helper
         /// which we will init once
-      
+
         private void InitializeTransitionHelper()
         {
             // we pass in the UIElement that will host our Visuals
             transition = new ColorBloomTransitionHelper(hostForVisual);
+            buttonTransition = new ColorBloomTransitionHelper(hostForButtonVisual);
+            //transition = new ColorBloomTransitionHelper(secondHost);
+            //transition = new ColorBloomTransitionHelper(thirdHost);
+            //transition = new ColorBloomTransitionHelper(fourthHost);
 
             // when the transition completes, we need to know so we can update other property values
             transition.ColorBloomTransitionCompleted += ColorBloomTransitionCompleted;
+            buttonTransition.ColorBloomTransitionCompleted += buttonColorBloomTransitionCompleted;
         }
 
-
-       
-
-
-       
+    
 
 
-       
+
+
+
+
+
+
         /// Updates the background of the layout panel to the same color whose transition animation just completed.
-        
+
         private void ColorBloomTransitionCompleted(object sender, EventArgs e)
         {
             PivotItem item = new PivotItem();
@@ -175,16 +182,16 @@ namespace colourBloomPivot
 
             pivotColorBloom = false;
             gridColorBloom = false;
-           
+
 
         }
 
 
-       
+
         /// In response to a XAML layout event on the Grid (named UICanvas) we will keep the animation
         /// inside UICanvas.
- 
-        
+
+
         private void UICanvas_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             var uiCanvasLocation = UICanvas.TransformToVisual(UICanvas).TransformPoint(new Windows.Foundation.Point(0d, 0d));
@@ -202,13 +209,14 @@ namespace colourBloomPivot
             if (stopDisposing == false)
             {
                 transition.Dispose();
+                buttonTransition.Dispose(); 
                 stopDisposing = true;
             }
 
         }
 
 
-       
+
 
         private void treePivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
 
@@ -222,7 +230,7 @@ namespace colourBloomPivot
             //Uses values of the rectangle size as the size of the "header" (Initially
             //I wanted it to use the pivot's size but I couldn't get it to work. 
             //Would be awesome if someonebody found a way to make it work...
-            var initialBounds = new Windows.Foundation.Rect()  
+            var initialBounds = new Windows.Foundation.Rect()
             {
                 Width = header.RenderSize.Width,
                 Height = header.RenderSize.Height,
@@ -257,9 +265,71 @@ namespace colourBloomPivot
                 content.Visibility = Visibility.Visible;
             }
         }
-    }
 
+        private void colourBloomButton_Click(object sender, RoutedEventArgs e)
+        {
+            //This is what casues the animation to occur in the button
+
+            var header = buttonHeader;
+            
+            var headerPosition = buttonHeader.TransformToVisual(limitOfAnimation).TransformPoint(new Windows.Foundation.Point(0d, 0d));
+
+            //var header = sender as Button;
+
+            //var headerPosition = header.TransformToVisual(colourBloomSpace).TransformPoint(new Windows.Foundation.Point(0d, 0d));
+
+            //Uses values of the rectangle size as the size of the "header" (Initially
+            //I wanted it to use the pivot's size but I couldn't get it to work). 
+            //Would be awesome if someonebody found a way to make it work..
+             
+
+            var initialBounds = new Windows.Foundation.Rect()
+            {
+                Width = header.RenderSize.Width,
+                Height = header.RenderSize.Height,
+                X = headerPosition.X,
+                Y = headerPosition.Y
+            };
+
+            var finalPosition = limitOfAnimation.TransformToVisual(limitOfAnimation).TransformPoint(new Windows.Foundation.Point(0d, 0d));
+            var finalBounds = new Rect(finalPosition, limitOfAnimation.RenderSize); // maps to the bounds of the current window
+            //The code is super easy to understand if you set a break point here and 
+            //check to see what happens step by step ;)
+            buttonTransition.Start((Windows.UI.Color.FromArgb(255, 255, 0, 0)),  // the color for the circlular bloom
+                                 initialBounds,                                  // the initial size and position
+                                       finalBounds);                             // the area to fill over the animation duration
+
+            // Add item to queue of transitions
+           
+        }
+        
+        private void limitOfAnimation_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            //This method is extremly vital. This creates the clipping which stops the 
+            //animation from occuring outside of the button.
+            var colourBloomCanvasLocation = limitOfAnimation.TransformToVisual(limitOfAnimation).TransformPoint(new Windows.Foundation.Point(0d, 0d));
+
+            var clip = new RectangleGeometry()
+
+            {
+
+                Rect = new Windows.Foundation.Rect(colourBloomCanvasLocation, e.NewSize)
+
+            };
+
+            limitOfAnimation.Clip = clip;
+        }
+
+        //Applies color to the button after the animation has finished.
+        private void buttonColorBloomTransitionCompleted(object sender, EventArgs e)
+        {
+            colourBloomButton.Background = new SolidColorBrush(Windows.UI.Colors.Red);
+        }
+
+    }
 }
+
+
 
     
 

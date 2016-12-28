@@ -13,9 +13,6 @@ using Windows.UI.Xaml.Hosting;
 namespace colourBloomPivot
 {
     //This is where the fun part begins!!
-    //Should probaby comment this later since
-    //Microsoft's expalnations are a lot more
-    //complex than they should be.
     public class ColorBloomTransitionHelper : IDisposable
     {
         UIElement hostForVisual;
@@ -24,6 +21,7 @@ namespace colourBloomPivot
         ScalarKeyFrameAnimation _bloomAnimation;
         IImageLoader _imageLoader;
         ICircleSurface _circleMaskSurface;
+        
 
         public ColorBloomTransitionHelper(UIElement hostForVisual)
         {
@@ -65,6 +63,7 @@ namespace colourBloomPivot
 
         private SpriteVisual CreateVisualWithColorAndPosition(Windows.UI.Color color, Windows.Foundation.Rect initialBounds, Windows.Foundation.Rect finalBounds)
         {
+
             var width = (float)initialBounds.Width;
             var height = (float)initialBounds.Height;
             var positionX = initialBounds.X;
@@ -167,7 +166,7 @@ namespace colourBloomPivot
                 );
             _bloomAnimation = _compositor.CreateScalarKeyFrameAnimation();
             _bloomAnimation.InsertKeyFrame(1.0f, scaleFactor, bloomEase);
-            _bloomAnimation.Duration = TimeSpan.FromMilliseconds(900); // keeping this under a sec to not be obtrusive
+            _bloomAnimation.Duration = TimeSpan.FromMilliseconds(800); // keeping this under a sec to not be obtrusive
             
 
 
