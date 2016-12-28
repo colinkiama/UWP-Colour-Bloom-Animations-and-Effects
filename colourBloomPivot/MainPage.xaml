@@ -38,23 +38,51 @@
            <!-->This Rectangle below is where the animation starts from
             I originally wanted the animation to start from the postion of the pivot item title selected
             but I couldn't figure it out. It would be awesome if someone found a solution...<-->
-            <Rectangle x:Name="hostForVisual" />
-         
+            <Rectangle x:Name="hostForVisual"/>
+            <!--<Rectangle x:Name="secondHost" 
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Center"/>
+            <Rectangle x:Name="thirdHost" 
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Bottom"
+                       />
+            <Rectangle x:Name="fourthHost" 
+                       HorizontalAlignment="Right"
+                       VerticalAlignment="Center"/>-->
             <Pivot Name="mainPivot"
                    SelectionChanged="treePivot_SelectionChanged">
-<!-->Notice how every Pivot Items is transparent. They need to be "Filled" with colour<-->
+<!-->Notice how every Pivot Item is transparent. They need to be "Filled" with colour<-->
                 <PivotItem Name="firstPivot"
                            Header="frst"
-                           Background="Transparent">
+                           Background="Transparent"
+                           Foreground="Black">
 
                     <RelativePanel>
 
                         <TextBlock Name="Welcome"
                                    Text="Welcome Back!"
-                                   FontSize="36"
-                                   RelativePanel.AlignVerticalCenterWithPanel="True"
+                                   FontSize="20"
+                                   RelativePanel.AlignTopWithPanel="True"
                                    RelativePanel.AlignHorizontalCenterWithPanel="True" />
-
+                       <!-->The Grid Below is what will be used to create the color bloom animation inside a button<-->
+                        <Grid Name="limitOfAnimation"
+                              Background="Transparent"
+                              RelativePanel.AlignHorizontalCenterWith="Welcome"
+                              RelativePanel.AlignVerticalCenterWithPanel="True"
+                              SizeChanged="limitOfAnimation_SizeChanged">
+                            <Rectangle Name="hostForButtonVisual" 
+                                       Fill="Transparent"/>
+                            <Button Name="colourBloomButton" 
+                                Background="Transparent"
+                                Click="colourBloomButton_Click">
+                            <Grid Name="colourBloomSpace"
+                                Background="Transparent">
+                                    
+                                    <TextBlock Name="buttonHeader" 
+                                           Text="Bloom!!!"/>
+                            </Grid>    
+                        </Button>
+                        </Grid>
                     </RelativePanel>
 
                 </PivotItem>
