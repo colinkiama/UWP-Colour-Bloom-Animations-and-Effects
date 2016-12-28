@@ -55,11 +55,16 @@
             <Pivot Name="mainPivot"
                    SelectionChanged="treePivot_SelectionChanged">
 <!-->Notice how every Pivot Item is transparent. They need to be "Filled" with colour<-->
-                <PivotItem Name="firstPivot"
-                           Header="frst"
+                <PivotItem Name="firstPivotItem"
                            Background="Transparent"
                            Foreground="Black">
-                    
+                    <PivotItem.Header>
+                        <AppBarButton Name="firstPivot"
+                                Content="first"
+                                Style="{ThemeResource TextBlockButtonStyle}"
+                                Foreground="Black" 
+                                Click="header_Click"/>
+                    </PivotItem.Header>
                     <RelativePanel>
 
                         <TextBlock Name="Welcome"
@@ -89,9 +94,15 @@
                     </RelativePanel>
 
                 </PivotItem>
-                <PivotItem Name="secondPivot"
-                           Header="second"
+                <PivotItem Name="secondPivotItem"
                            Background="Transparent">
+                    <PivotItem.Header>
+                        <AppBarButton Name="secondPivot"
+                                      Content="second"
+                                      Style="{ThemeResource TextBlockButtonStyle}"
+                                      Foreground="Black"
+                                      Click="header_Click"/>
+                    </PivotItem.Header>
                     <Grid Name="moneyTreeSpace">
                       
                         <RelativePanel HorizontalAlignment="Stretch">
@@ -126,9 +137,15 @@
                         </RelativePanel>
                     </Grid>
                 </PivotItem>
-                <PivotItem Name="thirdPivot"
-                           Header="third"
+                <PivotItem Name="thirdPivotItem"
                            Background="Transparent">
+                    <PivotItem.Header>
+                        <AppBarButton Name="thirdPivot"
+                                      Content="third"
+                                      Style="{ThemeResource TextBlockButtonStyle}"
+                                      Foreground="Black" 
+                                      Click="header_Click"/>
+                    </PivotItem.Header>
                     <RelativePanel>
                       
                             <TextBlock Text="Yes!!!"
@@ -150,7 +167,10 @@
                     Grid.Row="1"
                     Background="#19000000"
                     Foreground="DarkBlue">
-
+            <AppBarButton Name="toNextPage"
+                          Click="toNextPage_Click"
+                          Foreground="DarkBlue"
+                          Icon="Up" />
         </CommandBar>
     </Grid>
 

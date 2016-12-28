@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -146,45 +145,58 @@ namespace colourBloomPivot
 
         private void ColorBloomTransitionCompleted(object sender, EventArgs e)
         {
-            PivotItem item = new PivotItem();
+            //PivotItem item = new PivotItem();
+            //// Grab an item off the pending transitions queue
+            //if (pivotColorBloom == true)
+            //{
+            //    int itemsToRemove = 0;
+            //    if (pendingTransitions.Count > 0)
+            //    {
+            //        //var item = pendingTransitions.Dequeue();
+            //        var itemUsed = pendingTransitions.Last();
+            //        item = itemUsed;
+            //        //Following code ensures that list is cleaned up to prevent any memory leaks/errors
+            //        foreach (var itemToBeRemoved in pendingTransitions)
+            //        {
+            //            itemsToRemove += 1;
+
+            //        }
+            //        for (int i = 0; i == itemsToRemove; i++)
+            //        {
+            //            pendingTransitions.Dequeue();
+            //        }
+            //    }
+            //    //
+
+            //    //pendingTransitions.Dequeue();
+            //    var header = item;
+            //    UICanvas.Background = new SolidColorBrush((Windows.UI.Color)_colorsByPivotItem[header.Name]);
+
+            //}
+            //if (gridColorBloom == true)
+            //{
+            //    pendingPageTransitions.Dequeue();
+            //    // now remember, that bloom animation was just transitional
+            //    // so we need to explicitly set the correct color as background of the layout panel
+            //    UICanvas.Background = new SolidColorBrush(Windows.UI.Colors.Green);
+            //}
+
+            //pivotColorBloom = false;
+            //gridColorBloom = false;
+
             // Grab an item off the pending transitions queue
-            if (pivotColorBloom == true)
-            {
-                int itemsToRemove = 0;
-                if (pendingTransitions.Count > 0)
-                {
-                    //var item = pendingTransitions.Dequeue();
-                    var itemUsed = pendingTransitions.Last();
-                    item = itemUsed;
-                    //Following code ensures that list is cleaned up to prevent any memory leaks/errors
-                    foreach (var itemToBeRemoved in pendingTransitions)
-                    {
-                        itemsToRemove += 1;
 
-                    }
-                    for (int i = 0; i == itemsToRemove; i++)
-                    {
-                        pendingTransitions.Dequeue();
-                    }
-                }
-                //
+            var item = pendingTransitions.Dequeue();
 
-                //pendingTransitions.Dequeue();
-                var header = item;
-                UICanvas.Background = new SolidColorBrush((Windows.UI.Color)_colorsByPivotItem[header.Name]);
 
-            }
-            if (gridColorBloom == true)
-            {
-                pendingPageTransitions.Dequeue();
-                // now remember, that bloom animation was just transitional
-                // so we need to explicitly set the correct color as background of the layout panel
-                UICanvas.Background = new SolidColorBrush(Windows.UI.Colors.Green);
-            }
 
-            pivotColorBloom = false;
-            gridColorBloom = false;
+            // now remember, that bloom animation was just transitional
 
+            // so we need to explicitly set the correct color as background of the layout panel
+
+            var header = (AppBarButton)item.Header;
+
+            UICanvas.Background = new SolidColorBrush((Windows.UI.Color)_colorsByPivotItem[header.Name]);
 
         }
 
@@ -226,13 +238,10 @@ namespace colourBloomPivot
         {
             pivotColorBloom = true;
             var beforeheader = sender as Pivot;
-            var header = (PivotItem)beforeheader.SelectedItem;
-
+            var rightBeforeHeader = beforeheader.SelectedItem as PivotItem;
+            var header = rightBeforeHeader.Header as AppBarButton;
             var headerPosition = header.TransformToVisual(UICanvas).TransformPoint(new Windows.Foundation.Point(0d, 0d));
 
-            //Uses values of the rectangle size as the size of the "header" (Initially
-            //I wanted it to use the pivot's size but I couldn't get it to work. 
-            //Would be awesome if someonebody found a way to make it work...
             var initialBounds = new Windows.Foundation.Rect()
             {
                 Width = header.RenderSize.Width,
@@ -250,7 +259,7 @@ namespace colourBloomPivot
                                        finalBounds);                             // the area to fill over the animation duration
 
             // Add item to queue of transitions
-            var pivotItem = (PivotItem)mainPivot.Items.Single(i => (((PivotItem)i).Name.Equals(header.Name)));
+            var pivotItem = (PivotItem)mainPivot.Items.Single(i => ((AppBarButton)((PivotItem)i).Header).Name.Equals(header.Name));
             pendingTransitions.Enqueue(pivotItem);
 
             //This code deals with a bug that occurs when you go navigate to a new page then come back to this one.
@@ -267,6 +276,47 @@ namespace colourBloomPivot
             {
                 content.Visibility = Visibility.Visible;
             }
+
+
+            //var headerPosition = header.TransformToVisual(UICanvas).TransformPoint(new Windows.Foundation.Point(0d, 0d));
+
+            ////Uses values of the rectangle size as the size of the "header" (Initially
+            ////I wanted it to use the pivot's size but I couldn't get it to work. 
+            ////Would be awesome if someonebody found a way to make it work...
+            //var initialBounds = new Windows.Foundation.Rect()
+            //{
+            //    Width = header.RenderSize.Width,
+            //    Height = header.RenderSize.Height,
+            //    X = headerPosition.X,
+            //    Y = headerPosition.Y
+            //};
+
+            //var finalBounds = Window.Current.Bounds;  // maps to the bounds of the current window
+
+            ////The code is super easy to understand if you set a break point here and 
+            ////check to see what happens step by step ;)
+            //transition.Start((Windows.UI.Color)_colorsByPivotItem[header.Name],  // the color for the circlular bloom
+            //                     initialBounds,                                  // the initial size and position
+            //                           finalBounds);                             // the area to fill over the animation duration
+
+            //// Add item to queue of transitions
+            //var pivotItem = (PivotItem)mainPivot.Items.Single(i => (((PivotItem)i).Name.Equals(header.Name)));
+            //pendingTransitions.Enqueue(pivotItem);
+
+            ////This code deals with a bug that occurs when you go navigate to a new page then come back to this one.
+            //if (carefulPlz == true)
+            //{
+            //    var item = pendingTransitions.Dequeue();
+            //    var headerFinish = item;
+            //    UICanvas.Background = new SolidColorBrush((Windows.UI.Color)_colorsByPivotItem[headerFinish.Name]);
+            //    carefulPlz = false;
+            //}
+            //// Make the content visible immediately, when first clicked. Subsequent clicks will be handled by Pivot Control
+            //var content = (FrameworkElement)pivotItem.Content;
+            //if (content.Visibility == Visibility.Collapsed)
+            //{
+            //    content.Visibility = Visibility.Visible;
+            //}
         }
 
         private void colourBloomButton_Click(object sender, RoutedEventArgs e)
@@ -274,7 +324,6 @@ namespace colourBloomPivot
             //This is what casues the animation to occur in the button
 
             var header = buttonHeader;
-            
             var headerPosition = buttonHeader.TransformToVisual(limitOfAnimation).TransformPoint(new Windows.Foundation.Point(0d, 0d));
 
             //var header = sender as Button;
@@ -417,7 +466,56 @@ namespace colourBloomPivot
             UICanvas.Background = new SolidColorBrush(Windows.UI.Colors.WhiteSmoke);
         }
 
+        private void toNextPage_Click(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(bloomPage));
+        }
 
+        private void header_Click(object sender, RoutedEventArgs e)
+        {
+            pivotColorBloom = true;
+            var header = sender as AppBarButton;
+
+            var headerPosition = header.TransformToVisual(UICanvas).TransformPoint(new Windows.Foundation.Point(0d, 0d));
+
+            //Uses values of the rectangle size as the size of the "header" (Initially
+            //I wanted it to use the pivot's size but I couldn't get it to work. 
+            //Would be awesome if someonebody found a way to make it work...
+            var initialBounds = new Windows.Foundation.Rect()
+            {
+                Width = header.RenderSize.Width,
+                Height = header.RenderSize.Height,
+                X = headerPosition.X,
+                Y = headerPosition.Y
+            };
+
+            var finalBounds = Window.Current.Bounds;  // maps to the bounds of the current window
+
+            //The code is super easy to understand if you set a break point here and 
+            //check to see what happens step by step ;)
+            transition.Start((Windows.UI.Color)_colorsByPivotItem[header.Name],  // the color for the circlular bloom
+                                 initialBounds,                                  // the initial size and position
+                                       finalBounds);                             // the area to fill over the animation duration
+
+            // Add item to queue of transitions
+            var pivotItem = (PivotItem)mainPivot.Items.Single(i => ((AppBarButton)((PivotItem)i).Header).Name.Equals(header.Name));
+            pendingTransitions.Enqueue(pivotItem);
+
+            //This code deals with a bug that occurs when you go navigate to a new page then come back to this one.
+            if (carefulPlz == true)
+            {
+                var item = pendingTransitions.Dequeue();
+                var headerFinish = item;
+                UICanvas.Background = new SolidColorBrush((Windows.UI.Color)_colorsByPivotItem[headerFinish.Name]);
+                carefulPlz = false;
+            }
+            // Make the content visible immediately, when first clicked. Subsequent clicks will be handled by Pivot Control
+            var content = (FrameworkElement)pivotItem.Content;
+            if (content.Visibility == Visibility.Collapsed)
+            {
+                content.Visibility = Visibility.Visible;
+            }
+        }
     }
 }
 
