@@ -35,10 +35,13 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
-           <!-->This Rectangle below is where the animation starts from
+           <!-->This Rectangle below is where the animation occurs from
+            You can place as many rectangles as you want here and they'll
+            all cover the display as long as you don't set any dimensions
             I originally wanted the animation to start from the postion of the pivot item title selected
             but I couldn't figure it out. It would be awesome if someone found a solution...<-->
-            <Rectangle x:Name="hostForVisual"/>
+            <Rectangle x:Name="hostForVisual" />
+            <Rectangle x:Name="anotherHost" />
             <!--<Rectangle x:Name="secondHost" 
                        HorizontalAlignment="Left"
                        VerticalAlignment="Center"/>
@@ -56,7 +59,7 @@
                            Header="frst"
                            Background="Transparent"
                            Foreground="Black">
-
+                    
                     <RelativePanel>
 
                         <TextBlock Name="Welcome"
@@ -90,15 +93,36 @@
                            Header="second"
                            Background="Transparent">
                     <Grid Name="moneyTreeSpace">
-
+                      
                         <RelativePanel HorizontalAlignment="Stretch">
                            
-                            <TextBlock Text="Woohoo!"
+                            <TextBlock Name="WoohooText"
+                                       Text="Woohoo!"
                                        RelativePanel.AlignHorizontalCenterWithPanel="True"
                                        RelativePanel.AlignVerticalCenterWithPanel="True"></TextBlock>
+                            <Button Name="surroundBloomButton"
+                                    Content="Bloom Everywhere!"
+                                    RelativePanel.Below="WoohooText"
+                                    RelativePanel.AlignHorizontalCenterWith="WoohooText"
+                                    Click="surroundBloomButton_Click" />
+                            <TextBlock Name="topFlower"
+                                       Text="a"
+                                       RelativePanel.AlignTopWithPanel="True"
+                                       RelativePanel.AlignHorizontalCenterWithPanel="True" />
 
-                         
-                           
+                            <TextBlock Name="rightFlower" 
+                                       Text="a"
+                                       RelativePanel.AlignRightWithPanel="True"
+                                       RelativePanel.AlignVerticalCenterWithPanel="True" />
+                            <TextBlock Name="bottomFlower"
+                                       Text="a"
+                                       RelativePanel.AlignBottomWithPanel="True"
+                                       RelativePanel.AlignHorizontalCenterWithPanel="True" />
+                            <TextBlock Name="leftFlower"
+                                       Text="a"
+                                       RelativePanel.AlignLeftWithPanel="True"
+                                       RelativePanel.AlignVerticalCenterWithPanel="True" />
+
                         </RelativePanel>
                     </Grid>
                 </PivotItem>

@@ -41,6 +41,7 @@ namespace colourBloomPivot
         PropertySet _colorsByPivotItem;
         ColorBloomTransitionHelper transition;
         ColorBloomTransitionHelper buttonTransition;
+        ColorBloomTransitionHelper surroundButtonTransition;
         Queue<PivotItem> pendingTransitions = new Queue<PivotItem>();
         Queue<Rectangle> pendingPageTransitions = new Queue<Rectangle>();
 
@@ -122,16 +123,17 @@ namespace colourBloomPivot
             // we pass in the UIElement that will host our Visuals
             transition = new ColorBloomTransitionHelper(hostForVisual);
             buttonTransition = new ColorBloomTransitionHelper(hostForButtonVisual);
-            //transition = new ColorBloomTransitionHelper(secondHost);
-            //transition = new ColorBloomTransitionHelper(thirdHost);
-            //transition = new ColorBloomTransitionHelper(fourthHost);
-
+            surroundButtonTransition = new ColorBloomTransitionHelper(anotherHost);
+        
             // when the transition completes, we need to know so we can update other property values
             transition.ColorBloomTransitionCompleted += ColorBloomTransitionCompleted;
             buttonTransition.ColorBloomTransitionCompleted += buttonColorBloomTransitionCompleted;
+            surroundButtonTransition.ColorBloomTransitionCompleted += SurroundButtonTransition_ColorBloomTransitionCompleted;
         }
 
-    
+       
+
+
 
 
 
@@ -209,7 +211,8 @@ namespace colourBloomPivot
             if (stopDisposing == false)
             {
                 transition.Dispose();
-                buttonTransition.Dispose(); 
+                buttonTransition.Dispose();
+                surroundButtonTransition.Dispose();
                 stopDisposing = true;
             }
 
@@ -325,6 +328,94 @@ namespace colourBloomPivot
         {
             colourBloomButton.Background = new SolidColorBrush(Windows.UI.Colors.Red);
         }
+
+        private void surroundBloomButton_Click(object sender, RoutedEventArgs e)
+        {
+          
+            //all of these headers are actually textblocks I've placed on the sides of the grid.
+            var header = topFlower;
+
+            var headerPosition = topFlower.TransformToVisual(UICanvas).TransformPoint(new Windows.Foundation.Point(0d, 0d));
+
+            var header2 = rightFlower;
+
+            var header2Position = rightFlower.TransformToVisual(UICanvas).TransformPoint(new Windows.Foundation.Point(0d, 0d));
+
+            var header3 = bottomFlower;
+
+            var header3Position = bottomFlower.TransformToVisual(UICanvas).TransformPoint(new Windows.Foundation.Point(0d, 0d));
+
+            var header4 = leftFlower;
+
+            var header4Position = leftFlower.TransformToVisual(UICanvas).TransformPoint(new Windows.Foundation.Point(0d, 0d));
+
+
+
+
+            //Uses values of the textBlock size
+
+
+            var initialBounds = new Windows.Foundation.Rect()
+            {
+                Width = header.RenderSize.Width,
+                Height = header.RenderSize.Height,
+                X = headerPosition.X,
+                Y = headerPosition.Y
+            };
+
+            var finalBounds = Window.Current.Bounds; // maps to the bounds of the current window
+            //The code is super easy to understand if you set a break point here and 
+            //check to see what happens step by step ;)
+            surroundButtonTransition.Start((Windows.UI.Color.FromArgb(255, 255, 0, 0)),  // the color for the circlular bloom
+                                 initialBounds,                                  // the initial size and position
+                                       finalBounds);                             // the area to fill over the animation duration
+
+            // Add item to queue of transitions
+
+            initialBounds = new Rect()
+            {
+                Width = header2.RenderSize.Width,
+                Height = header2.RenderSize.Height,
+                X = header2Position.X,
+                Y = header2Position.Y
+            };
+
+            surroundButtonTransition.Start((Windows.UI.Color.FromArgb(255, 255, 150, 0)),  // the color for the circlular bloom
+                               initialBounds,                                  // the initial size and position
+                                     finalBounds);                             // the area to fill over the animation duration
+
+            initialBounds = new Rect()
+            {
+                Width = header3.RenderSize.Width,
+                Height = header3.RenderSize.Height,
+                X = header3Position.X,
+                Y = header3Position.Y
+            };
+
+            surroundButtonTransition.Start((Windows.UI.Color.FromArgb(255, 0, 255, 0)),  // the color for the circlular bloom
+                               initialBounds,                                  // the initial size and position
+                                     finalBounds);                             // the area to fill over the animation duration
+
+            initialBounds = new Rect()
+            {
+                Width = header4.RenderSize.Width,
+                Height = header4.RenderSize.Height,
+                X = header4Position.X,
+                Y = header4Position.Y
+            };
+
+            surroundButtonTransition.Start((Windows.UI.Color.FromArgb(255, 0, 0, 255)),  // the color for the circlular bloom
+                               initialBounds,                                  // the initial size and position
+                                     finalBounds);                             // the area to fill over the animation duration
+        }
+
+        private void SurroundButtonTransition_ColorBloomTransitionCompleted(object sender, EventArgs e)
+        {
+            //Changes colour of background to "White Smoke " when 
+            //the animations have finished.
+            UICanvas.Background = new SolidColorBrush(Windows.UI.Colors.WhiteSmoke);
+        }
+
 
     }
 }
