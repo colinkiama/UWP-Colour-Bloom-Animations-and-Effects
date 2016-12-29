@@ -60,10 +60,14 @@
                            Foreground="Black">
                     <PivotItem.Header>
                         <AppBarButton Name="firstPivot"
-                                Content="first"
-                                Style="{ThemeResource TextBlockButtonStyle}"
-                                Foreground="Black" 
-                                Click="header_Click"/>
+                                      Style="{ThemeResource TextBlockButtonStyle}"
+                                      Foreground="Black"
+                                      Click="header_Click">
+                            <AppBarButton.Content>
+                                <TextBlock Text="first"
+                                           FontSize="20" />
+                            </AppBarButton.Content>
+                        </AppBarButton>
                     </PivotItem.Header>
                     <RelativePanel>
 
@@ -98,10 +102,14 @@
                            Background="Transparent">
                     <PivotItem.Header>
                         <AppBarButton Name="secondPivot"
-                                      Content="second"
                                       Style="{ThemeResource TextBlockButtonStyle}"
                                       Foreground="Black"
-                                      Click="header_Click"/>
+                                      Click="header_Click">
+                            <AppBarButton.Content>
+                                <TextBlock Text="second" 
+                                           FontSize="20"/>
+                            </AppBarButton.Content>
+                        </AppBarButton>
                     </PivotItem.Header>
                     <Grid Name="moneyTreeSpace">
                       
@@ -141,10 +149,14 @@
                            Background="Transparent">
                     <PivotItem.Header>
                         <AppBarButton Name="thirdPivot"
-                                      Content="third"
                                       Style="{ThemeResource TextBlockButtonStyle}"
-                                      Foreground="Black" 
-                                      Click="header_Click"/>
+                                      Foreground="Black"
+                                      Click="header_Click">
+                            <AppBarButton.Content>
+                                <TextBlock Text="third"
+                                           FontSize="20" />
+                            </AppBarButton.Content>
+                        </AppBarButton>
                     </PivotItem.Header>
                     <RelativePanel>
                       

@@ -106,6 +106,7 @@ namespace colourBloomPivot
                 Rect = new Windows.Foundation.Rect(uiCanvasLocation, e.NewSize)
             };
             UICanvas.Clip = clip;
+            InitializeTransitionHelper();
         }
 
 
