@@ -1,4 +1,4 @@
-# Full-Page-Colour-Bloom-Effect
+# UWP Colour Bloom Animations and Effects
 Animates the whole page with a color changing animations using the windows.ui.compositon APIs
 If you want to know more about windows.ui.composition, check out the repo for it here: https://github.com/Microsoft/WindowsUIDevLabs
 
